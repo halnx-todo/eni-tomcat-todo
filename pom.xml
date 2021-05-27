@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.diehard.sample.todowebsite</groupId>
+    <artifactId>eni-todo</artifactId>
+    <version>0.2-SNAPSHOT</version>
+    <packaging>${override.packaging}</packaging>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.5.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>11</java.version>
+        <!-- webjar parameter -->
+        <webjars-locator-core.version>0.46</webjars-locator-core.version>
+        <bootstrap.version>3.4.1</bootstrap.version>
+        <jquery.version>3.5.1</jquery.version>
+        <!-- persistance parameter -->
+        <override.packaging>war</override.packaging>
+        <com.h2database.jdbc.dependency.scope>test</com.h2database.jdbc.dependency.scope>
+        <com.mariadb.jdbc.dependency.scope>runtime</com.mariadb.jdbc.dependency.scope>
+        <!-- build parameter-->
+        <mariajdbcurl>jdbc:mysql://127.0.0.1:3306/db_todo</mariajdbcurl>
+        <mariadbusername>springuser</mariadbusername>
+        <mariadbpasswd>mypassword-quoor-uHoe7z</mariadbpasswd>
+        <multipartlocation>${java.io.tmpdir}</multipartlocation>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
+            <version>${webjars-locator-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <!-- Use Connectors -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>${com.h2database.jdbc.dependency.scope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <scope>${com.mariadb.jdbc.dependency.scope}</scope>
+        </dependency>
+        <!-- Tests scopes -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Junit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.6.3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito extention -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>tomcat-h2</id>
+            <properties>
+                <override.packaging>war</override.packaging>
+                <com.h2database.jdbc.dependency.scope>runtime</com.h2database.jdbc.dependency.scope>
+                <com.mariadb.jdbc.dependency.scope>test</com.mariadb.jdbc.dependency.scope>
+            </properties>
+            <build>
+                <finalName>${project.artifactId}-tomcat-h2</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>tomcat-mariadb</id>
+            <properties>
+                <override.packaging>war</override.packaging>
+                <com.h2database.jdbc.dependency.scope>test</com.h2database.jdbc.dependency.scope>
+                <com.mariadb.jdbc.dependency.scope>runtime</com.mariadb.jdbc.dependency.scope>
+            </properties>
+            <build>
+                <finalName>${project.artifactId}-tomcat-mariadb</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>simpleapp</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <override.packaging>jar</override.packaging>
+                <com.h2database.jdbc.dependency.scope>runtime</com.h2database.jdbc.dependency.scope>
+                <com.mariadb.jdbc.dependency.scope>provided</com.mariadb.jdbc.dependency.scope>
+            </properties>
+            <build>
+                <finalName>${project.artifactId}</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>boot-mariadb</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <override.packaging>jar</override.packaging>
+                <com.h2database.jdbc.dependency.scope>test</com.h2database.jdbc.dependency.scope>
+                <com.mariadb.jdbc.dependency.scope>runtime</com.mariadb.jdbc.dependency.scope>
+            </properties>
+            <build>
+                <finalName>${project.artifactId}-boot-mariadb</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>openshift</id>
+            <properties>
+                <override.packaging>war</override.packaging>
+                <com.h2database.jdbc.dependency.scope>test</com.h2database.jdbc.dependency.scope>
+                <com.mariadb.jdbc.dependency.scope>runtime</com.mariadb.jdbc.dependency.scope>
+            </properties>
+            <build>
+                <finalName>ROOT</finalName>
+            </build>
+        </profile>
+    </profiles>
+    <!-- should it be move it to .m2/settings.xml -->
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+        <repository>
+            <id>org.jboss.repository.releases</id>
+            <name>JBoss Maven Release Repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

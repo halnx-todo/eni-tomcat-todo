@@ -1,0 +1,152 @@
+# eni-tomcat-todo
+Cette application est un application d'exemple pour le projet xxx.
+
+Elle permets de construire et d'executer un application web selon plusieurs mode:
+
+Nous prenons quelque racourcit pour des raison pedagogique afin de mettre en avant les changements de pratique de 2005 a nos jours (2021)
+
+Les images :
+- eni-todo:tomcat-mariadb-harcoded : [application-tomcat-mariadb-harcoded.properties](src/main/resources/application-tomcat-mariadb-harcoded.properties)
+  va utiliser le filtre maven pour modifier les parametres entre '@' avec les valeur passer lors du build.
+
+- eni-todo:tomcat-h2-env : [application.properties](src/main/resources/application.properties)
+  c'est la version tomcat avec une base h2 (memoire)
+
+- eni-todo:tomcat-mariadb-env : [application-tomcat-mariadb-env.properties](src/main/resources/application-tomcat-mariadb-env.properties)
+  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker
+
+- eni-todo:tomcat-mariadb-kub : [application-eni-todo:tomcat-mariadb-kub.properties](src/main/resources/application-tomcat-mariadb-kub.properties)
+  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configurer pour utiliser un moteur JGroups, de replication de sesion.Il est fait pour focntionner dans Kubernetes
+
+- eni-todo:tomcat-mariadb-kub : [application-eni-todo:tomcat-mariadb-kub.properties](src/main/resources/application-tomcat-mariadb-kub.properties)
+  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configurer pour utiliser un moteur JGroups, de replication de sesion.Il est fait pour focntionner dans Kubernetes
+
+- eni-todo:boot-h2-env : [application-eni-todo:boot-h2-env.properties](src/main/resources/application-boot-h2-env.properties)
+  c'est la version string-boot avec une base h2 (memoire)
+
+- eni-todo:boot-mariadb-env : [application-eni-todo:boot-mariadb-env.properties](src/main/resources/application-boot-mariadb-env.properties)
+  c'est la version string-boot avec une base mariadb parametre par les variables d'environnement
+
+#@todo
+- _eni-todo:boot-mariadb-kube_ : 
+  c'est la version string-boot avec une base mariadb (memoire) pour kubernetes avec une replication de session _jdbc/hazelcats_
+
+
+ - 
+## start mariadb
+
+```bash
+DB_DTB_PASSWORD="mypassword-quoor-uHoe7z" &&\
+DB_DTB_USERNAME="springuser" &&\
+DB_DTB_PORT="3306" &&\
+DB_DTB_NAME="db_todo" &&\
+DB_DTB_ROOT_PASSWORD="r00t-aeKie8ahWai_"
+docker run --rm \
+  -e MYSQL_USER="${DB_DTB_USERNAME}" \
+  -e MYSQL_PASSWORD="${DB_DTB_PASSWORD}" \
+  -e MYSQL_DATABASE="${DB_DTB_NAME}" \
+  -e MYSQL_ROOT_PASSWORD="${DB_DTB_USERNAME}" \
+  -p ${DB_DTB_PORT}:${DB_DTB_PORT} \
+  -d mariadb:10.5.8
+```
+
+## Build all the images
+
+```bash
+
+MULTIPART_LOCATION=/usr/local/tomcat/files &&\
+DB_DTB_JDBC_URL="jdbc:mysql://mariadb:3306/db_todo" &&\
+DB_DTB_PASSWORD="mypassword-quoor-uHoe7z" &&\
+DB_DTB_USERNAME="springuser" &&\
+docker build -t eni-todo:tomcat-mariadb-harcoded \
+   --build-arg MULTIPART_LOCATION="${MULTIPART_LOCATION}" \
+   --build-arg DB_DTB_JDBC_URL="${DB_DTB_JDBC_URL}" \
+   --build-arg DB_DTB_USERNAME="${DB_DTB_USERNAME}" \
+   --build-arg DB_DTB_PASSWORD="${DB_DTB_USERNAME}" \
+   --target eni-todo-tomcat-mariadb-harcoded . &&\
+docker build -t eni-todo:tomcat-h2-env --target eni-todo-tomcat-h2-env . &&\   
+docker build -t eni-todo:tomcat-mariadb-env --target eni-todo-tomcat-mariadb-env . &&\
+docker build -t eni-todo:tomcat-mariadb-kub --target eni-todo-tomcat-mariadb-kub . &&\
+docker build -t eni-todo:boot-h2-env --target eni-todo-boot-h2-env . &&\
+docker build -t eni-todo:boot-mariadb-env --target eni-todo-boot-mariadb-env .
+
+###@todo docker build -t eni-todo-boot-mariadb-kube:latest --target eni-todo-boot-mariadb-kub .
+```
+
+```bash
+
+MULTIPART_LOCATION=/usr/local/tomcat/files &&\
+DB_DTB_JDBC_URL="jdbc:mysql://$(minikube -p minikube ip):3306/db_todo" &&\
+DB_DTB_PASSWORD="mypassword-quoor-uHoe7z" &&\
+DB_DTB_USERNAME="springuser" &&\
+docker build -t eni-todo:tomcat-mariadb-harcoded \
+   --build-arg MULTIPART_LOCATION="${MULTIPART_LOCATION}" \
+   --build-arg DB_DTB_JDBC_URL="${DB_DTB_JDBC_URL}" \
+   --build-arg DB_DTB_USERNAME="${DB_DTB_USERNAME}" \
+   --build-arg DB_DTB_PASSWORD="${DB_DTB_USERNAME}" \
+   --target eni-todo-tomcat-mariadb-harcoded . &&\
+docker build -t eni-todo-tomcat-h2:latest --target eni-todo-tomcat-h2-env . &&\   
+docker build -t eni-todo-tomcat-mariadb:latest --target eni-todo-tomcat-mariadb-env . &&\
+docker build -t eni-todo:tomcat-mariadb-kub --target eni-todo-tomcat-mariadb-kub . &&\
+docker build -t eni-todo:boot-h2-env --target eni-todo-boot-h2-env . &&\
+docker build -t eni-todo:boot-mariadb-env --target eni-todo-boot-mariadb-env .
+
+###@todo docker build -t eni-todo-boot-mariadb-kube:latest --target eni-todo-boot-mariadb-kub .
+```
+
+## run tomcat-mariadb-harcoded
+
+```bash
+docker run --rm -p 8080:8080 eni-todo:tomcat-mariadb-harcoded
+```
+
+
+## run tomcat-mariadb-env with overriden values
+
+ATTENION au minikube -p eni-todo ip pour avoir l'ip dynamiquement a partir de minikube
+
+```bash
+DB_DTB_JDBC_URL="jdbc:mysql://$(minikube -p eni-todo ip):3306/db_todo" &&\
+SPRING_PROFILES_ACTIVE=tomcat-mariadb-env &&\
+DB_DTB_PASSWORD="mypassword-quoor-uHoe7z" &&\
+DB_DTB_USERNAME="springuser" &&\
+MULTIPART_LOCATION=/usr/local/tomcat/files 
+docker run --rm -p 8080:8080 -e SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE}" \
+                             -e MULTIPART_LOCATION="${MULTIPART_LOCATION}" \
+                             -e DB_DTB_JDBC_URL="${DB_DTB_JDBC_URL}" \
+                             -e DB_DTB_USERNAME="${DB_DTB_USERNAME}" \
+                             -e DB_DTB_PASSWORD="${DB_DTB_PASSWORD}" \
+                             eni-todo:tomcat-mariadb-env
+```
+
+#.... INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [312717] milliseconds
+
+## run boot-h2-env with overriden values
+
+```bash
+MULTIPART_LOCATION=/usr/local/tomcat/files &&\
+docker run --rm -p 8080:8080 -e MULTIPART_LOCATION="${MULTIPART_LOCATION}"
+```
+
+## run boot-mariabdb-env with overriden values
+
+ATTENTION au minikube et au changement de MULTIPART_LOCATION
+
+```bash
+DB_DTB_JDBC_URL="jdbc:mysql://$(minikube -p eni-todo ip):3306/db_todo" &&\
+SPRING_PROFILES_ACTIVE=tomcat-mariadb-env &&\
+DB_DTB_PASSWORD="mypassword-quoor-uHoe7z" &&\
+DB_DTB_USERNAME="springuser" &&\
+MULTIPART_LOCATION="/usr/local/eni-todo/files"
+
+docker run --rm -p 8080:8080 -e SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE}" \
+                             -e MULTIPART_LOCATION="${MULTIPART_LOCATION}" \
+                             -e DB_DTB_JDBC_URL="${DB_DTB_JDBC_URL}" \
+                             -e DB_DTB_USERNAME="${DB_DTB_USERNAME}" \
+                             -e DB_DTB_PASSWORD="${DB_DTB_PASSWORD}" \
+                             eni-todo:boot-mariadb-env
+```
+
+## for kubernetes 
+
+@todo
