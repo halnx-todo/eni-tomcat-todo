@@ -10,29 +10,26 @@ Les images :
   va utiliser le filtre maven pour modifier les parametres entre '@' avec les valeur passer lors du build.
 
 - eni-todo:tomcat-h2-env : [application.properties](src/main/resources/application.properties)
+
   c'est la version tomcat avec une base h2 (memoire)
 
 - eni-todo:tomcat-mariadb-env : [application-tomcat-mariadb-env.properties](src/main/resources/application-tomcat-mariadb-env.properties)
-  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker
+  
+  c'est la version tomcat avec une base mariadb configurée à partir des variables d'environnement au lancement de l'image docker
 
 - eni-todo:tomcat-mariadb-kub : [application-eni-todo:tomcat-mariadb-kub.properties](src/main/resources/application-tomcat-mariadb-kub.properties)
-  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configuré pour utiliser un moteur de replication de session. Il est fait pour focntionner dans Kubernetes
-
-- eni-todo:tomcat-mariadb-kub : [application-eni-todo:tomcat-mariadb-kub.properties](src/main/resources/application-tomcat-mariadb-kub.properties)
-  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configuré pour utiliser un moteur JGroups, de replication de sesion.Il est fait pour focntionner dans Kubernetes
-
+  
+  c'est la version tomcat avec une base mariadb configurée à partir des variables d'environnement au lancement de l'image docker, le serveur est configurée pour utiliser un moteur de replication de session. Il est fait pour fonctionner dans Kubernetes
+  
 - eni-todo:boot-h2-env : [application-eni-todo:boot-h2-env.properties](src/main/resources/application-boot-h2-env.properties)
+  
   c'est la version string-boot avec une base h2 (memoire)
 
 - eni-todo:boot-mariadb-env : [application-eni-todo:boot-mariadb-env.properties](src/main/resources/application-boot-mariadb-env.properties)
-  c'est la version string-boot avec une base mariadb parametre par les variables d'environnement
-
-#@todo
-- _eni-todo:boot-mariadb-kube_ : 
-  c'est la version string-boot avec une base mariadb (memoire) pour kubernetes avec une replication de session _jdbc/hazelcats_
+  
+  c'est la version string-boot avec une base mariadb paramètre par les variables d'environnement
 
 
- - 
 ## start mariadb
 
 ```bash
