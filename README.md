@@ -16,10 +16,10 @@ Les images :
   c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker
 
 - eni-todo:tomcat-mariadb-kub : [application-eni-todo:tomcat-mariadb-kub.properties](src/main/resources/application-tomcat-mariadb-kub.properties)
-  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configurer pour utiliser un moteur JGroups, de replication de sesion.Il est fait pour focntionner dans Kubernetes
+  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configuré pour utiliser un moteur de replication de session. Il est fait pour focntionner dans Kubernetes
 
 - eni-todo:tomcat-mariadb-kub : [application-eni-todo:tomcat-mariadb-kub.properties](src/main/resources/application-tomcat-mariadb-kub.properties)
-  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configurer pour utiliser un moteur JGroups, de replication de sesion.Il est fait pour focntionner dans Kubernetes
+  c'est la version tomcat avec une base mariadb configuer a partir des variables d'environnement au lancement de l'image docker, le serveur est configuré pour utiliser un moteur JGroups, de replication de sesion.Il est fait pour focntionner dans Kubernetes
 
 - eni-todo:boot-h2-env : [application-eni-todo:boot-h2-env.properties](src/main/resources/application-boot-h2-env.properties)
   c'est la version string-boot avec une base h2 (memoire)
@@ -147,6 +147,4 @@ docker run --rm -p 8080:8080 -e SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE
                              eni-todo:boot-mariadb-env
 ```
 
-## for kubernetes 
 
-@todo

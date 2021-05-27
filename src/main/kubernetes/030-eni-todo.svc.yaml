@@ -13,4 +13,4 @@ spec:
   selector:
     app: eni-todo
   sessionAffinity: ClientIP
-  type: NodePort
+  type: ClusterIP
